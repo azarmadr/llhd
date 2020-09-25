@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.14.2 - 2020-09-17
+### Fixed
+- Fix entity simulation panic caused by `halt` instruction (#143)
+
 ## 0.14.1 - 2020-09-05
 ### Fixed
 - Fix faulty constant folding on signal/pointer shifts (#138)
