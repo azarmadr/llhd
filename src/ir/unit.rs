@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 Fabian Schuiki
+// Copyright (c) 2017-2021 Fabian Schuiki
 
 use crate::{
     analysis::{DominatorTree, PredecessorTable, TemporalRegionGraph},
@@ -805,6 +805,7 @@ impl<'a> UnitBuilder<'a> {
                 self.replace_use(value, Value::invalid());
             }
             self.remove_inst_dfg(inst);
+            self.data.layout.unmap_inst(inst);
         }
     }
 
@@ -961,8 +962,9 @@ impl<'a> UnitBuilder<'a> {
 
     /// Add an instruction.
     fn add_inst_dfg(&mut self, data: InstData, ty: Type) -> Inst {
+        let has_result = data.opcode() == Opcode::Call || !ty.is_void();
         let inst = self.data.dfg.insts.add(data);
-        if !ty.is_void() {
+        if has_result {
             let result = self.add_value(ValueData::Inst { ty, inst });
             self.data.dfg.results.add(inst, result);
         }
@@ -1295,13 +1297,13 @@ impl<'a> UnitBuilder<'a> {
     /// Append an instruction to the end of a BB.
     pub fn append_inst(&mut self, inst: Inst, bb: Block) {
         self.data.layout.bbs[bb].layout.append_inst(inst);
-        self.data.layout.inst_map.insert(inst, bb);
+        self.data.layout.map_inst(inst, bb);
     }
 
     /// Prepend an instruction to the beginning of a BB.
     pub fn prepend_inst(&mut self, inst: Inst, bb: Block) {
         self.data.layout.bbs[bb].layout.prepend_inst(inst);
-        self.data.layout.inst_map.insert(inst, bb);
+        self.data.layout.map_inst(inst, bb);
     }
 
     /// Insert an instruction after another instruction.
@@ -1310,7 +1312,7 @@ impl<'a> UnitBuilder<'a> {
         self.data.layout.bbs[bb]
             .layout
             .insert_inst_after(inst, after);
-        self.data.layout.inst_map.insert(inst, bb);
+        self.data.layout.map_inst(inst, bb);
     }
 
     /// Insert an instruction before another instruction.
@@ -1319,14 +1321,14 @@ impl<'a> UnitBuilder<'a> {
         self.data.layout.bbs[bb]
             .layout
             .insert_inst_before(inst, before);
-        self.data.layout.inst_map.insert(inst, bb);
+        self.data.layout.map_inst(inst, bb);
     }
 
     /// Remove an instruction from the function.
     pub fn remove_inst(&mut self, inst: Inst) {
         let bb = self.inst_block(inst).expect("`inst` not inserted");
         self.data.layout.bbs[bb].layout.remove_inst(inst);
-        self.data.layout.inst_map.remove(&inst);
+        self.data.layout.unmap_inst(inst);
     }
 }
 

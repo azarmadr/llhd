@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 Fabian Schuiki
+// Copyright (c) 2017-2021 Fabian Schuiki
 
 //! The Low Level Hardware Description language. This library provides tools to
 //! create, modify, store, and load LLHD graphs.
@@ -14,6 +14,7 @@ extern crate serde;
 pub mod assembly;
 pub mod analysis;
 pub mod ir;
+pub mod mlir;
 pub mod opt;
 pub mod pass;
 pub mod table;

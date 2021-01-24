@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 Fabian Schuiki
+// Copyright (c) 2017-2021 Fabian Schuiki
 
 //! Temporal Code Motion
 
@@ -76,6 +76,7 @@ impl Pass for TemporalCodeMotion {
                     continue;
                 }
                 debug!("Hoisting {} into {}", inst.dump(&unit), head_bb.dump(&unit));
+                unit.remove_inst(inst);
                 unit.prepend_inst(inst, head_bb);
                 modified = true;
             }

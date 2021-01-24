@@ -5,9 +5,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+
+## 0.15.0 - 2021-01-09
+### Added
+- Add `mlir::writer` module
+
 ### Changed
-- Update dependencies `indoc`, `num`, `regex`, `lalrpop-util`, `time`
+- Return `Value` from `InstBuilder::call`
+
+### Fixed
+- Remove `%` from basic block names in `Block` formatting
+
+## 0.14.3 - 2020-11-10
+### Changed
+- Update dependencies `indoc`, `num`, `regex`, `lalrpop-util`
+- Remove dependency `time`
 - Increase minimum rustc version to 1.45
+
+### Fixed
+- Fix TCM duplicating instructions rather than moving them (#145)
+- Fix `delete_block` not removing instruction-to-block mapping (#146)
 
 ## 0.14.2 - 2020-09-17
 ### Fixed

@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 Fabian Schuiki
+// Copyright (c) 2017-2021 Fabian Schuiki
 
 //! A tool to convert between LLHD and other formats
 
@@ -20,7 +20,6 @@ use std::{
 };
 
 mod liberty;
-mod mlir_writer;
 pub mod verilog;
 
 fn main() -> Result<()> {
@@ -243,9 +242,7 @@ fn write_output(module: &llhd::ir::Module, output: &mut impl Write, format: Form
             Ok(())
         }
         Format::Mlir => {
-            mlir_writer::Writer::new(output)
-                .write_module(module)
-                .unwrap();
+            llhd::mlir::write_module(output, module);
             Ok(())
         }
         f => bail!("{} outputs not supported", f),
